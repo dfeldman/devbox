@@ -1,0 +1,11 @@
+# Devbox
+
+This is a script that sets up my preferred dev environment. 
+
+It is based on Ubuntu Groovy.
+
+Key parts include VSCode Server as an IDE, kind for creating Kubernetes clusters,
+and a lot of Go tools. 
+
+If you have Vagrant already set up, you should be able to cd into this directory, and run
+vagrant up to get a full copy of it. It takes a few minutes though.
