@@ -36,6 +36,7 @@ sudo apt-get install -y \
     tmux \
     unzip \
     vim \
+    virtualbox \
     zip 
 sudo apt-get install build-essential
 sudo snap install rustup --classic
@@ -192,7 +193,7 @@ python -m pip install --user paramiko
 sudo snap install exercism
 
 # Install GetEnvoy
-curl -L https://getenvoy.io/cli | bash -s -- -b /usr/local/bin
+curl -L https://getenvoy.io/cli | sudo bash -s -- -b /usr/local/bin
 
 # Install git-secrets globally
 brew install git-secrets
