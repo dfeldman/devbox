@@ -21,7 +21,7 @@ Vagrant.configure("2") do |config|
 
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://vagrantcloud.com/search.
-  config.vm.box = "ubuntu/groovy64"
+  config.vm.box = "ubuntu/hirsute64"
 
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
@@ -55,10 +55,11 @@ Vagrant.configure("2") do |config|
   # the path on the host to the actual folder. The second argument is
   # the path on the guest to mount the folder. And the optional third
   # argument is a set of non-required options.
-  # NOTE: When I made this, the synced folders with Virtualbox were seriously
-  # broken. So I switched to using NFS. NFS does not work at all on my Mac though :( . 
-  config.vm.synced_folder "~/work", "/home/vagrant/work", type: "vboxsf"
-  config.vm.synced_folder "~/devbox-output", "/home/vagrant/devbox-output", type: "vboxsf"
+
+  # NFS does not work on mac due to firewall. Commenting out for now. 
+  config.vm.synced_folder "~/work", "/home/vagrant/work", type: "nfs", :nfs_version => 4
+  config.vm.synced_folder "~/devbox-output", "/home/vagrant/devbox-output", type: "nfs", :nfs_version => 4
+
 
   config.vm.provision "file", source: "~/.git-credentials", destination: ".git-credentials"
   config.vm.provision "file", source: "~/.github-credentials", destination: ".github-credentials"
@@ -77,6 +78,7 @@ Vagrant.configure("2") do |config|
   #
   #   # Customize the amount of memory on the VM:
     vb.memory = "8192"
+    vb.cpus = "4"
     vb.customize ['modifyvm', :id, '--nested-hw-virt', 'on']
   end
   #

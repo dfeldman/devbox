@@ -3,9 +3,12 @@
 # This script is designed to set up a useful dev environment, with many 
 # different dev utilities. It is tested on Ubuntu Groovy64 only.
 
+PATH_ADD=/usr/local/go/bin:/home/linuxbrew/.linuxbrew/bin
+
 
 # Install apt packages
 sudo apt-get update
+sudo apt-get upgrade
 sudo apt-get install -y \
     apt-transport-https \
     aptitude \
@@ -37,10 +40,14 @@ sudo apt-get install -y \
     unzip \
     vim \
     virtualbox \
-    zip 
+    zip \
+    zsh
 sudo apt-get install build-essential
 sudo snap install rustup --classic
-    
+
+# Update PATH
+echo export PATH=\$PATH:$PATH_ADD >> ~/.bashrc
+echo export PATH=\$PATH:$PATH_ADD >> ~/.zshrc
 
 # Make sure Taskwarrior data is stored outside the VM
 echo "data.location=~/work/.task" >> ~/.taskrc
@@ -57,31 +64,14 @@ sudo apt-get update
 
 # Install docker-compose
 sudo curl -L "https://github.com/docker/compose/releases/download/1.29.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-chmod a+rx /usr/local/bin/docker-compose
+sudo chmod a+rx /usr/local/bin/docker-compose
 
 # Install Golang
 sudo wget https://golang.org/dl/go1.16.4.linux-amd64.tar.gz
 sudo tar -C /usr/local -xzf go1.16.4.linux-amd64.tar.gz
-echo export PATH=$PATH:/home/vagrant/bin:/usr/local/go/bin >> ~/.bashrc
-echo export PATH=$PATH:/home/linuxbrew/.linuxbrew/bin >> ~/.bashrc
-tar -C /usr/local -xzf go1.16.4.linux-amd64.tar.gz
-. ~/.bashrc
 
-# Install useful golang tooling
-export GO111MODULE=on  # Enable module mode
-go get google.golang.org/protobuf/cmd/protoc-gen-go \
-       google.golang.org/grpc/cmd/protoc-gen-go-grpc
-go get github.com/fullstorydev/grpcui/...
-go install github.com/fullstorydev/grpcui/cmd/grpcui
-curl -sfL https://raw.githubusercontent.com/securego/gosec/master/install.sh | sh -s -- -b $(go env GOPATH)/bin vX.Y.Z
-
-# Install golangci
-curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sudo sh
-
-# Install some useful go binaries that install completely with go get
-mkdir tmp
-cd tmp
-go get google.golang.org/grpc/cmd/protoc-gen-go-grpc
+# Add
+# protoc-gen-go-, grpcui, gosec, gohack
 
 
 # Install oh-my-zsh
@@ -186,8 +176,8 @@ gh auth login --hostname github.com --with-token <~/.github-credentials
 git clone git://github.com/dfeldman/dotfiles.git ~/dotfiles
 
 # Install Ansible
-sudo python -m pip install ansible --user ansible
-python -m pip install --user paramiko
+sudo python3 -m pip install ansible --user ansible
+sudo python3 -m pip install --user paramiko
 
 # Install Exercism (code practice program)
 sudo snap install exercism
@@ -199,6 +189,9 @@ curl -L https://getenvoy.io/cli | sudo bash -s -- -b /usr/local/bin
 brew install git-secrets
 git secrets --install ~/.git-templates/git-secrets
 git config --global init.templateDir ~/.git-templates/git-secrets
+
+# Update locate db
+sudo updatedb
 
 # Need to re-login
 sudo usermod -a -G docker vagrant
